@@ -162,4 +162,67 @@
     }];
 }
 
+
+- (void)vitals_saveHeartRate:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
+{
+    double heartRate = [RCTAppleHealthKit doubleValueFromOptions:input];
+    NSDate *sampleDate = [RCTAppleHealthKit dateFromOptionsDefaultNow:input];
+    HKUnit *count = [HKUnit countUnit];
+    HKUnit *minute = [HKUnit minuteUnit];
+    HKUnit *heartRateUnit = [RCTAppleHealthKit hkUnitFromOptions:input key:@"unit" withDefault:[count unitDividedByUnit:minute]];
+    
+    HKQuantity *heartRateQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
+    HKQuantityType *heartRateType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
+    HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:heartRateType quantity:heartRateQuantity startDate:sampleDate endDate:sampleDate];
+    
+    [self.healthStore saveObject:heartRateSample withCompletion:^(BOOL success, NSError *error) {
+        if (!success) {
+            callback(@[RCTJSErrorFromNSError(error)]);
+            return;
+        }
+        callback(@[[NSNull null], @(heartRate)]);
+    }];
+}
+
+- (void)vitals_saveHeartRateResting:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
+{
+    double heartRate = [RCTAppleHealthKit doubleValueFromOptions:input];
+    NSDate *sampleDate = [RCTAppleHealthKit dateFromOptionsDefaultNow:input];
+    HKUnit *count = [HKUnit countUnit];
+    HKUnit *minute = [HKUnit minuteUnit];
+    HKUnit *heartRateUnit = [RCTAppleHealthKit hkUnitFromOptions:input key:@"unit" withDefault:[count unitDividedByUnit:minute]];
+    
+    HKQuantity *heartRateQuantity = [HKQuantity quantityWithUnit:heartRateUnit doubleValue:heartRate];
+    HKQuantityType *heartRateType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierRestingHeartRate];
+    HKQuantitySample *heartRateSample = [HKQuantitySample quantitySampleWithType:heartRateType quantity:heartRateQuantity startDate:sampleDate endDate:sampleDate];
+    
+    [self.healthStore saveObject:heartRateSample withCompletion:^(BOOL success, NSError *error) {
+        if (!success) {
+            callback(@[RCTJSErrorFromNSError(error)]);
+            return;
+        }
+        callback(@[[NSNull null], @(heartRate)]);
+    }];
+}
+
+- (void)vitals_saveHeartRateVariabilitySDNN:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
+{
+    double heartRateSDNN = [RCTAppleHealthKit doubleValueFromOptions:input];
+    NSDate *sampleDate = [RCTAppleHealthKit dateFromOptionsDefaultNow:input];
+    HKUnit *ms = [HKUnit secondUnitWithMetricPrefix:HKMetricPrefixMilli];
+    HKUnit *heartRateSDNNUnit = [RCTAppleHealthKit hkUnitFromOptions:input key:@"unit" withDefault:ms];
+    
+    HKQuantity *heartRateSDNNQuantity = [HKQuantity quantityWithUnit:heartRateSDNNUnit doubleValue:heartRateSDNN];
+    HKQuantityType *heartRateSDNNType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRateVariabilitySDNN];
+    HKQuantitySample *heartRateSDNNSample = [HKQuantitySample quantitySampleWithType:heartRateSDNNType quantity:heartRateSDNNQuantity startDate:sampleDate endDate:sampleDate];
+    
+    [self.healthStore saveObject:heartRateSDNNSample withCompletion:^(BOOL success, NSError *error) {
+        if (!success) {
+            callback(@[RCTJSErrorFromNSError(error)]);
+            return;
+        }
+        callback(@[[NSNull null], @(heartRateSDNN)]);
+    }];
+}
+
 @end

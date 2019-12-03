@@ -54,6 +54,7 @@
         callback(@[RCTJSErrorFromNSError(error)]);
         return;
     }
+    
     if(dob == nil) {
         NSDictionary *response = @{
                                    @"value" : [NSNull null],

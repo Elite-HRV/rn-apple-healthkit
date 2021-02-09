@@ -308,6 +308,8 @@
 
                     NSDictionary *elem = @{
                             @"value" : valueString,
+                            @"sourceName" : [[[sample sourceRevision] source] name],
+                            @"sourceId" : [[[sample sourceRevision] source] bundleIdentifier],
                             @"valueId" : @(sample.value),
                             @"metadata" : (sample.metadata == nil || ![NSJSONSerialization isValidJSONObject:sample.metadata]) ? @{} : sample.metadata,
                             @"startDate" : startDateString,

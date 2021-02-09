@@ -14,13 +14,16 @@
 #pragma mark - HealthKit Permissions
 
 - (nullable HKObjectType *)getReadPermFromText:(nonnull NSString*)key {
+    UIDevice *deviceInfo = [UIDevice currentDevice];
+    float systemVersion = deviceInfo.systemVersion.floatValue;
+
     // Characteristic Identifiers
-    if ([@"Height" isEqualToString: key]) {
+    if ([@"DateOfBirth" isEqualToString: key]) {
+        return [HKObjectType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
+    }else if ([@"Height" isEqualToString: key]) {
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
     }else if ([@"Weight" isEqualToString: key]) {
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
-    }else if ([@"DateOfBirth" isEqualToString: key]) {
-        return [HKObjectType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
     }else if ([@"BiologicalSex" isEqualToString: key]) {
         return [HKObjectType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex];
     }
@@ -88,7 +91,10 @@
     }
     
     // workouts
-    if ([@"MindfulSession" isEqualToString: key]) {
+    // if ([@"MindfulSession" isEqualToString: key] && systemVersion >= 10.0) {
+    //     return [HKObjectType categoryTypeForIdentifier:HKCategoryTypeIdentifierMindfulSession];
+    // } else if ([@"MindfulSession" isEqualToString: key]){
+    if ([@"MindfulSession" isEqualToString: key]){
         return [HKObjectType workoutType];
     }
     
@@ -96,6 +102,8 @@
 }
 
 - (nullable HKObjectType *)getWritePermFromText:(nonnull NSString*) key {
+
+    
     // Body Measurements
     if([@"Height" isEqualToString:key]) {
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];

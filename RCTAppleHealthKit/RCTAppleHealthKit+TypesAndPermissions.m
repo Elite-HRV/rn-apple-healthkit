@@ -91,9 +91,10 @@
     }
     
     // workouts
-    if ([@"MindfulSession" isEqualToString: key] && systemVersion >= 10.0) {
-        return [HKObjectType categoryTypeForIdentifier:HKCategoryTypeIdentifierMindfulSession];
-    } else if ([@"MindfulSession" isEqualToString: key]){
+    // if ([@"MindfulSession" isEqualToString: key] && systemVersion >= 10.0) {
+    //     return [HKObjectType categoryTypeForIdentifier:HKCategoryTypeIdentifierMindfulSession];
+    // } else if ([@"MindfulSession" isEqualToString: key]){
+    if ([@"MindfulSession" isEqualToString: key]){
         return [HKObjectType workoutType];
     }
     

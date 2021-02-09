@@ -167,7 +167,9 @@
                                                @"device": device,
                                                @"distance" : @(distance),
                                                @"start" : startDateString,
-                                               @"end" : endDateString
+                                               @"end" : endDateString,
+                                               @"duration": @(sample.duration),
+                                               @"UUID" : [sample.UUID UUIDString]
                                                };
 
                         [data addObject:elem];
@@ -278,7 +280,7 @@
 
                 for (HKCategorySample *sample in results) {
 
-                    // HKCategoryType *catType = sample.categoryType;
+                    HKCategoryType *catType = sample.categoryType;
                     NSInteger val = sample.value;
 
                     // HKQuantity *quantity = sample.quantity;
@@ -290,23 +292,33 @@
                     NSString *valueString;
 
                     switch (val) {
-                      case HKCategoryValueSleepAnalysisInBed:
+                        case HKCategoryValueSleepAnalysisInBed:
                         valueString = @"INBED";
-                      break;
-                      case HKCategoryValueSleepAnalysisAsleep:
+                        break;
+                        case HKCategoryValueSleepAnalysisAsleep:
                         valueString = @"ASLEEP";
-                      break;
-                     default:
+                        break;
+                        case HKCategoryValueSleepAnalysisAwake:
+                        valueString = @"AWAKE";
+                        break;
+                        default:
                         valueString = @"UNKNOWN";
-                     break;
-                  }
+                        break;
+                    }
 
                     NSDictionary *elem = @{
                             @"value" : valueString,
                             @"sourceName" : [[[sample sourceRevision] source] name],
                             @"sourceId" : [[[sample sourceRevision] source] bundleIdentifier],
+                            @"valueId" : @(sample.value),
+                            @"metadata" : (sample.metadata == nil || ![NSJSONSerialization isValidJSONObject:sample.metadata]) ? @{} : sample.metadata,
                             @"startDate" : startDateString,
                             @"endDate" : endDateString,
+                            @"UUID" : [sample.UUID UUIDString],
+                            @"categoryTypeIdentifier": sample.categoryType.identifier,
+                            @"categoryTypeDescription": sample.categoryType.description,
+                            @"sourceName" : [[[sample sourceRevision] source] name],
+                            @"sourceId" : [[[sample sourceRevision] source] bundleIdentifier]
                     };
 
                     [data addObject:elem];
